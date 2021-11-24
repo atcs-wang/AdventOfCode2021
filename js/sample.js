@@ -1,5 +1,6 @@
+"use strict";
 function sayHello(person) {
     return "Hello, " + person;
 }
-var user = "Matthew";
+let user = "Matthew Wang";
 console.log(sayHello(user));
