@@ -35,7 +35,7 @@ projectRoot
 ```
 Some changes should be made to `tsconfig.json`:
 
-```
+```json
 {
   "include": ["./src/**/*"],
   "exclude": ["node_modules/**/*"],
@@ -54,3 +54,25 @@ As a result, now the general compile command will compile everything in the `src
 tsc
 ```
 
+## Typing in npm :
+
+One last step before really getting going - node functions like `require` don't have 
+TypeScript types built in. We can install them easily with:
+
+(VSCode also complains...)
+https://stackoverflow.com/a/46819440
+
+  `npm install --save-dev @types/node`
+
+Additionally / alternatively (???) Update these lines in the tsconfig.json
+```json
+    "typeRoots": ["node_modules/@types"],                                  /* Specify multiple folders that act like `./node_modules/@types`. */
+    "types": ["node"],                                      /* Specify type package names to be included without being referenced in a source file. */
+```
+
+It seems using the ES6 `import` notation plays more nicely with auto-complete for modules like "fs" than the `require()` syntax
+```ts
+import * as fs from 'fs';
+// vs:
+const fs = require('fs');
+```
