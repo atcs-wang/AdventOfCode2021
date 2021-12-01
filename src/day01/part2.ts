@@ -1,10 +1,5 @@
-import * as fs from 'fs';
-// const fs = require('fs');
-
-// Reads whole input file into memory
-const input : string = fs.readFileSync("inputs/day01/input.txt", {encoding: "utf8"});
-const lines : number[] = input.split(/\r?\n/).map(Number);
-
+import * as read_input from '../utils/read_input';
+const lines : number[] = read_input.linesAsNumberArr(1);
 
 function sum(arr:number[]) : number {
     return arr.reduce((a,b) => a + b)
