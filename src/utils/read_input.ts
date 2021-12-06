@@ -14,7 +14,24 @@ function dayToFilePath(day : number) : string {
  */
 function linesAsStringArray(day : number) : string[] {
     try {
-        return fs.readFileSync(dayToFilePath(day), {encoding: "utf8"}).split(/\r?\n/);
+        return fs.readFileSync(dayToFilePath(day), {encoding: "utf8"}).trim().split(/\r?\n/);
+    } catch (e: unknown) {
+        console.log(`Input File not yet added to project! Visit:\n https://adventofcode.com/2021/day/${day}/input`);
+        throw e;
+    }
+} 
+
+
+/**
+ * Gets the day's input as an array of string arrays, chunked by 
+ * the given delimiter.
+ * @param day which day input it is.
+ * @param chunkDelimiter what to split the input by. Default is an empty line.
+ * @returns string array of each line
+ */
+ function linesAsChunkedStringArray(day : number, chunkDelimiter: string | RegExp = /\r?\n\r?\n/) : string[][] {
+    try {
+        return fs.readFileSync(dayToFilePath(day), {encoding: "utf8"}).trim().split(chunkDelimiter).map(chunk => chunk.split(/\r?\n/));
     } catch (e: unknown) {
         console.log(`Input File not yet added to project! Visit:\n https://adventofcode.com/2021/day/${day}/input`);
         throw e;
@@ -67,6 +84,6 @@ function linesAsReadlineInterface(day : number) : readline.Interface {
   return rl;
 }
 
-export {linesAsStringArray, linesAsNumberArr}
+export {linesAsStringArray, linesAsChunkedStringArray, linesAsNumberArr}
 
 
