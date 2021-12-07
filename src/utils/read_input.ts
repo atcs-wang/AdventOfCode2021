@@ -3,8 +3,8 @@ import * as readline from 'readline';
 
 // const fs = require('fs');
 
-function dayToFilePath(day : number) : string {
-    return `inputs/day${String(day).padStart(2,'0')}/input.txt`
+function dayToFilePath(day : number,sample?:boolean) : string {
+    return `inputs/day${String(day).padStart(2,'0')}/${sample?"sample":""}input.txt`
 }
 
 /**
@@ -12,9 +12,9 @@ function dayToFilePath(day : number) : string {
  * @param day which day input it is.
  * @returns string array of each line
  */
-function linesAsStringArray(day : number) : string[] {
+function linesAsStringArray(day : number, sample?:boolean) : string[] {
     try {
-        return fs.readFileSync(dayToFilePath(day), {encoding: "utf8"}).trim().split(/\r?\n/);
+        return fs.readFileSync(dayToFilePath(day, sample), {encoding: "utf8"}).trim().split(/\r?\n/);
     } catch (e: unknown) {
         console.log(`Input File not yet added to project! Visit:\n https://adventofcode.com/2021/day/${day}/input`);
         throw e;
@@ -29,9 +29,9 @@ function linesAsStringArray(day : number) : string[] {
  * @param chunkDelimiter what to split the input by. Default is an empty line.
  * @returns string array of each line
  */
- function linesAsChunkedStringArray(day : number, chunkDelimiter: string | RegExp = /\r?\n\r?\n/) : string[][] {
+ function linesAsChunkedStringArray(day : number, chunkDelimiter: string | RegExp = /\r?\n\r?\n/, sample?:boolean) : string[][] {
     try {
-        return fs.readFileSync(dayToFilePath(day), {encoding: "utf8"}).trim().split(chunkDelimiter).map(chunk => chunk.split(/\r?\n/));
+        return fs.readFileSync(dayToFilePath(day, sample), {encoding: "utf8"}).trim().split(chunkDelimiter).map(chunk => chunk.split(/\r?\n/));
     } catch (e: unknown) {
         console.log(`Input File not yet added to project! Visit:\n https://adventofcode.com/2021/day/${day}/input`);
         throw e;
@@ -43,8 +43,8 @@ function linesAsStringArray(day : number) : string[] {
  * @param day which day input it is.
  * @returns number array of each line
  */
-function linesAsNumberArr(day : number) : number[] {
-    return linesAsStringArray(day).map(Number);
+function linesAsNumberArr(day : number, sample?:boolean) : number[] {
+    return linesAsStringArray(day, sample).map(Number);
 }
 
 

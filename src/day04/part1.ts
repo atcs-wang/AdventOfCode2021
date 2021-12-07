@@ -6,7 +6,7 @@ let chunks : string[][] = read_input.linesAsChunkedStringArray(4);
 
 let nums = chunks[0][0].split(",").map(Number);
 
-let boards : BingoBoard[] = chunks.slice(1).map(chunk => new BingoBoard(chunk, Number));
+let boards : BingoBoard[] = chunks.slice(1).map(chunk => new BingoBoard(chunk));
 
 outerloop:
 for (let num of nums){

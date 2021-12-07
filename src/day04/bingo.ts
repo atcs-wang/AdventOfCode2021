@@ -1,8 +1,12 @@
-import {BetterGrid, Coordinate} from '../utils/grid';
+import {BetterGrid, Coordinate, linesToType2DArray} from '../utils/grid';
 
 //undefined is "marked"
 class BingoBoard extends BetterGrid< number | undefined> {
     
+    constructor(lines: string[]){
+        super(linesToType2DArray(lines, Number));
+    }
+
     mark(num: number) : Coordinate | null {
         for (let r = 0; r < this.height(); r++){
             for (let c= 0; c < this.width(); c++){
