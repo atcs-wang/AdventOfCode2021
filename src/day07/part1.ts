@@ -1,7 +1,7 @@
 import * as read_input from '../utils/read_input';
 
 
-let crabs: number[] = read_input.linesAsStringArray(7)[0].split(",").map(Number);
+let crabs: number[] = read_input.linesAsNumberArr(7, ",")
 
 let max = Math.max(...crabs);
 let min = Math.min(...crabs);

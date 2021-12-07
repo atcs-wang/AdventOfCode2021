@@ -43,8 +43,8 @@ function linesAsStringArray(day : number, sample?:boolean) : string[] {
  * @param day which day input it is.
  * @returns number array of each line
  */
-function linesAsNumberArr(day : number, sample?:boolean) : number[] {
-    return linesAsStringArray(day, sample).map(Number);
+function linesAsNumberArr(day : number,  delimiter:string ="\n", sample?:boolean,) : number[] {
+    return linesAsStringArray(day, sample).join("\n").split(delimiter).map(Number);
 }
 
 

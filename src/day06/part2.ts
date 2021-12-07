@@ -1,7 +1,7 @@
 import * as read_input from '../utils/read_input';
 
 
-let state: number[] = read_input.linesAsStringArray(6)[0].split(",").map(Number);
+let state: number[] = read_input.linesAsNumberArr(6, ",")
 
 let counter : number[] = new Array(9).fill(0);
 for (let fish of state){
