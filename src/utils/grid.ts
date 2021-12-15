@@ -62,6 +62,14 @@ class BasicGrid<Type> implements Grid<Type> {
         }
     }
 
+    getOrDefault(coord: Coordinate, defaultVal?:any){
+        if (this.grid[coord.row] === undefined)
+            return defaultVal;
+        if (this.grid[coord.row][coord.col] == undefined)
+            return defaultVal;
+        return this.grid[coord.row][coord.col];
+    }
+
     set(val: Type, row: number, col: number ) : void;
     set(val: Type, coord: Coordinate) : void;
     set(val: Type, rowOrCoord: number | Coordinate, col?: number): void {
@@ -107,6 +115,84 @@ class BetterGrid<Type> extends BasicGrid<Type> {
             t.push(this.grid.map(row => row[col]));
         }
         return t;
+    }
+
+    get_neighbors(coord: Coordinate,col_dist: number, row_dist: number): Type[]{
+        let neighbors: Type[] = [];
+        for (let dr =  -row_dist; dr <= row_dist; dr++){
+            for (let dc = -col_dist; dc <= col_dist; dc++){
+                if (dr === 0 && dc === 0)
+                    continue
+                let n = this.getOrDefault(toCoord(coord.row + dr,coord.col + dc), undefined);
+                if (n !== undefined){
+                    neighbors.push(n);
+                }
+            }    
+        }
+        return neighbors
+    }
+
+    // Awful copy and pasted code
+    get_neighbor_coords(coord: Coordinate,col_dist: number, row_dist: number): Coordinate[]{
+        let neighbors: Coordinate[] = [];
+        for (let dr =  -row_dist; dr <= row_dist; dr++){
+            for (let dc = -col_dist; dc <= col_dist; dc++){
+                if (dr === 0 && dc === 0)
+                    continue
+                let n = this.getOrDefault(toCoord(coord.row + dr,coord.col + dc), undefined);
+                if (n !== undefined){
+                    neighbors.push(toCoord(coord.row + dr,coord.col + dc)); //only change
+                }
+            }    
+        }
+        return neighbors
+    }
+
+    get_neighbors_diamond(coord: Coordinate, dist: number): Type[]{
+        let neighbors: Type[] = [];
+        for (let dr =  -dist; dr <= dist; dr++){
+            for (let dc = -dist; dc <= dist; dc++){
+                if ((dr === 0 && dc === 0) ||  Math.abs(dr) + Math.abs(dc) > dist)
+                    continue 
+                let n = this.getOrDefault(toCoord(coord.row + dr,coord.col + dc), undefined);
+                if (n !== undefined){
+                    neighbors.push(n);
+                }
+            }    
+        }
+        return neighbors
+    }
+
+    get_neighbor_coords_diamond(coord: Coordinate, dist: number): Coordinate[]{
+        let neighbors: Coordinate[] = [];
+        for (let dr =  -dist; dr <= dist; dr++){
+            for (let dc = -dist; dc <= dist; dc++){
+                if ((dr === 0 && dc === 0) ||  Math.abs(dr) + Math.abs(dc) > dist)
+                    continue 
+                let n = this.getOrDefault(toCoord(coord.row + dr,coord.col + dc), undefined);
+                if (n !== undefined){
+                    neighbors.push(toCoord(coord.row + dr,coord.col + dc)); //only change
+                }
+            }    
+        }
+        return neighbors
+    }
+
+    /**
+     * Performs in row major order
+     * @param func 
+     */
+    map<fType>(func : (val:Type,row:number, col:number) => fType ): fType[][]{
+        return this.grid.map(
+            (row:Type[], row_index) => row.map(
+                (val: Type, col_index) => func(val, row_index, col_index)
+            )
+        );
+        // for (let row = 0; row < this.height(); row++){
+        //     for (let col = 0; col < this.width(); col++){
+
+        //     }
+        // }
     }
 }
 
