@@ -188,11 +188,14 @@ class BetterGrid<Type> extends BasicGrid<Type> {
                 (val: Type, col_index) => func(val, row_index, col_index)
             )
         );
-        // for (let row = 0; row < this.height(); row++){
-        //     for (let col = 0; col < this.width(); col++){
+    }
 
-        //     }
-        // }
+    forEach(func : (val:Type,row:number, col:number) => any):void{
+        for (let row = 0; row < this.height(); row++){
+            for (let col = 0; col < this.width(); col++){
+                func(this.get(row,col), row, col);
+            }
+        }
     }
 }
 
