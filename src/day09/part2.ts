@@ -2,7 +2,7 @@ import * as read_input from '../utils/read_input';
 import {Coordinate, Grid, BetterGrid, linesToType2DArray, toCoord} from "../utils/grid"
 
 
-let grid : BetterGrid<number> = new BetterGrid<number>(linesToType2DArray(read_input.linesAsStringArray(9,false),Number, ""));
+let grid : BetterGrid<number> = new BetterGrid<number>(linesToType2DArray(read_input.linesAsStringArray(9),Number, ""));
 
 // return undefined for non-low points, and low point's coords if low point
 function getLowPointRisk(val : number, row : number, col :number) : Coordinate | undefined{

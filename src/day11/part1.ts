@@ -2,7 +2,7 @@ import * as read_input from '../utils/read_input';
 import {Coordinate, Grid, BetterGrid, linesToType2DArray, toCoord} from "../utils/grid"
 
 
-let octopuses : BetterGrid<number> = new BetterGrid<number>(linesToType2DArray(read_input.linesAsStringArray(11,false),Number, ""));
+let octopuses : BetterGrid<number> = new BetterGrid<number>(linesToType2DArray(read_input.linesAsStringArray(11),Number, ""));
 
 function printGrid(grid :BetterGrid<number>) {
     console.log(grid.asString("",1));

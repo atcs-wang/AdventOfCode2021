@@ -3,7 +3,7 @@ import * as read_input from '../utils/read_input';
 type OpeningBracket = "{" | "[" | "(" | "<"
 type ClosingBracket = "}" | "]" | ")" | ">"
 
-let lines : string[] = read_input.linesAsStringArray(10,false).map(s => s.trim());
+let lines : string[] = read_input.linesAsStringArray(10).map(s => s.trim());
 let closingOf = new Map<OpeningBracket, ClosingBracket>([ ["{","}"],
                                                           ["[","]"],
                                                           ["(",")"],
