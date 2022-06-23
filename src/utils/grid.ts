@@ -205,13 +205,13 @@ class FixedInitGrid<Type> extends BetterGrid<Type> {
     }
 }
 
-class InfiniteGrid<Type> implements Grid<Type> {
-    private grid: Map<Coordinate,Type>;
-    private _min_height: number;
-    private _max_height: number;
-    private _min_width: number;
-    private _max_width: number;
-    private _defaultVal : Type;
+class SparseGrid<Type> implements Grid<Type> {
+    private grid: Map<string,Type>;
+    _min_height: number;
+    _max_height: number;
+    _min_width: number;
+    _max_width: number;
+    readonly _defaultVal : Type;
 
     constructor(defaultVal : Type) {
         this.grid = new Map();
@@ -222,12 +222,21 @@ class InfiniteGrid<Type> implements Grid<Type> {
         this._defaultVal = defaultVal;
     }
 
-    private updateRanges(coord: Coordinate){
+    private updateRanges(rowOrCoord: number | Coordinate, col?: number){
         // Weird reversals to deal with NaN comparisons always producing falsy 
-        this._min_height = Math.min(this._min_height, coord.row);
-        this._max_height =Math.max(this._max_height, coord.row);
-        this._min_width = Math.min(this._min_width, coord.col);
-        this._max_width = Math.max(this._max_width, coord.col);
+        if (col !== undefined){
+            this._min_height = Math.min(this._min_height, rowOrCoord as number);
+            this._max_height =Math.max(this._max_height, rowOrCoord as number);
+            this._min_width = Math.min(this._min_width, col);
+            this._max_width = Math.max(this._max_width, col);
+        }
+        else {
+            let coord = rowOrCoord as Coordinate;
+            this._min_height = Math.min(this._min_height, coord.row);
+            this._max_height =Math.max(this._max_height, coord.row);
+            this._min_width = Math.min(this._min_width, coord.col);
+            this._max_width = Math.max(this._max_width, coord.col);
+        }
     }
 
     height(): number {
@@ -237,29 +246,29 @@ class InfiniteGrid<Type> implements Grid<Type> {
         return this._max_width - this._min_width;
     }
 
+    private coordEncode(rowOrCoord: number | Coordinate, col?: number):  string {
+        let coord : string;
+        if (col !== undefined)
+            coord = JSON.stringify(toCoord(rowOrCoord as number, col));
+        else {
+            coord = JSON.stringify(rowOrCoord as Coordinate);
+        }
+        return coord;
+    }
+
     get(row: number, col: number) : Type ;
     get(coord: Coordinate) :  Type ;
     get(rowOrCoord: number | Coordinate, col?: number):  Type  {
-        let coord : Coordinate;
-        if (col !== undefined)
-            coord = toCoord(rowOrCoord as number, col);
-        else {
-            coord = rowOrCoord as Coordinate;
-        }
+        let coord : string = this.coordEncode(rowOrCoord, col);
         return this.grid.has(coord) ? this.grid.get(coord) as Type : this._defaultVal; 
     }
 
     set(val: Type, row: number, col: number ) : void;
     set(val: Type, coord: Coordinate) : void;
     set(val: Type, rowOrCoord: number | Coordinate, col?: number): void {
-        let coord : Coordinate;
-        if (col !== undefined)
-            coord = toCoord(rowOrCoord as number, col);
-        else {
-            coord = rowOrCoord as Coordinate;
-        }
+        this.updateRanges(rowOrCoord, col);
+        let coord : string = this.coordEncode(rowOrCoord, col);
         this.grid.set(coord, val);
-        this.updateRanges(coord);
     }
 
     asArray(): Type[][]{
@@ -271,7 +280,7 @@ class InfiniteGrid<Type> implements Grid<Type> {
             }
             a.push(row);
         }
-        return a
+        return a;
     }
 
 
@@ -282,6 +291,25 @@ class InfiniteGrid<Type> implements Grid<Type> {
     toString(){
         return this.asString("");
     }
+
+    forEach(func : (val:Type, row:number, col:number) => any):void{
+        for (let row = 0; row < this.height(); row++){
+            for (let col = 0; col < this.width(); col++){
+                func(this.get(row,col), row, col);
+            }
+        }
+    }
+
+    forEachSparse(func : (val:Type, row:number, col:number) => any):void{
+        for (let [coordString, val] of this.grid.entries()){
+            let coord : Coordinate = JSON.parse(coordString);
+            func(val, coord.row, coord.col);
+        }
+    }
+
+    size():number{
+        return this.grid.size;
+    }
 }
 
-export {Grid, Coordinate, toCoord, linesToType2DArray, BasicGrid, BetterGrid, InfiniteGrid, FixedInitGrid}
+export {Grid, Coordinate, toCoord, linesToType2DArray, BasicGrid, BetterGrid, SparseGrid, FixedInitGrid}
